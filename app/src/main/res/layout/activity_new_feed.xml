@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    tools:context=".widget.NewFeedActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:background="@color/primary"
+        android:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:title="Create New Feed"
+            app:titleTextColor="@color/white" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <Button
+        android:id="@+id/tv_read_txt_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Add txt File"
+        android:background="@drawable/bg_button"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_value_16" />
+
+
+    <EditText
+        android:id="@+id/et_new_feed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/progressBar"
+        android:layout_below="@id/tv_read_txt_file"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_text"
+        android:ems="10"
+        android:layout_margin="@dimen/value_8"
+        android:focusable="true"
+        android:gravity="start"
+        android:hint="@string/new_feed"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/value_10"
+        android:textColor="@color/primary_text"
+        android:textColorHint="@color/secondary_text" />
+
+    <Button
+        android:id="@+id/btn_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/value_8"
+        android:background="@drawable/bg_button"
+        android:text="Post" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="@dimen/value_8"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/btn_post"
+        />
+
+
+
+</RelativeLayout>

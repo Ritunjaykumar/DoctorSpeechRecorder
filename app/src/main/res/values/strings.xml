@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Doctor Speech Recorder</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="my_feed">My Feed</string>
+    <string name="my_recording">My Recording</string>
+    <string name="new_feed">New Feed</string>
+    <string name="rate_me">Rate me</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="pause">Paused</string>
+    <string name="playing">playing</string>
+    <string name="finish">Finished</string>
+    <string name="not_playing">not playing</string>
+</resources>

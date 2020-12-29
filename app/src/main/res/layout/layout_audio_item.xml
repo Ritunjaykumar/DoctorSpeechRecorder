@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/value_4">
+
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ll_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/value_8">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_music"
+            app:tint="@color/primary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/value_4"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text_value_16" />
+
+            <TextView
+                android:id="@+id/tv_file_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:text="TextView"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text_value_16" />
+
+            <TextView
+                android:id="@+id/tv_upload_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/text_value_16" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/ib_download"
+            android:layout_width="@dimen/value_32"
+            android:layout_height="@dimen/value_32"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/value_8"
+            app:srcCompat="@drawable/ic_download"
+            app:tint="@color/primary" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/ll_container"
+        android:background="@color/divider" />
+</RelativeLayout>

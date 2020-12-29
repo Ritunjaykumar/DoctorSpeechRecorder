@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:paddingBottom="@dimen/value_4"
+    android:paddingTop="@dimen/value_4"
+    android:background="@color/accent"
+    android:layout_marginBottom="@dimen/value_4"
+    android:layout_marginTop="@dimen/value_4"
+    android:elevation="@dimen/value_4"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/show_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        app:srcCompat="@drawable/ic_recording" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/file_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/text_value_14" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:layout_marginTop="@dimen/value_8"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/text_value_14" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/ib_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:padding="@dimen/value_8"
+        android:layout_marginEnd="@dimen/value_8"
+        app:tint="@color/primary"
+        app:srcCompat="@drawable/ic_file_upload" />
+
+</LinearLayout>
