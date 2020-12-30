@@ -42,7 +42,7 @@ public class FeedFragment extends Fragment {
     private int postData;
     private int currentData;
     private int totalData;
-    private DocumentSnapshot previousDocument;
+    private static DocumentSnapshot previousDocument;
     private FeedFragment() {
     }
 
