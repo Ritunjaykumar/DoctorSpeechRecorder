@@ -44,6 +44,7 @@ public class FeedDetailsActivity extends AppCompatActivity {
     private TextView tvRecordFileName;
     private boolean isRecording = true;
     private MediaRecorder mediaRecorder;
+    private String document_id;
 
 
     @Override
@@ -81,11 +82,13 @@ public class FeedDetailsActivity extends AppCompatActivity {
             String userName = bundle.getString("user_name");
             String date = bundle.getString("date");
             String feed = bundle.getString("feed");
+            document_id = bundle.getString("document_id");
             boolean isFile = bundle.getBoolean("file", false);
             if (isFile) {
                 readTextFile();
             } else {
                 setData(userName, date, feed);
+                document_id = UUID.randomUUID().toString().substring(0, 10);
             }
         }
     }
@@ -100,7 +103,7 @@ public class FeedDetailsActivity extends AppCompatActivity {
 
     private void recordAudio() {
         String recordPath = this.getExternalFilesDir("/").getAbsolutePath();
-        String fileName = UserInfo.getInstance(FeedDetailsActivity.this).getUserId() + "&" + UUID.randomUUID().toString().substring(0, 10) + ".mp3";
+        String fileName = UserInfo.getInstance(FeedDetailsActivity.this).getUserId() + "&" + document_id+"&"+UUID.randomUUID().toString().substring(0, 5) + ".mp3";
         tvRecordFileName.setText(fileName);
 
         tvRecordOption.setText("Recording Started");

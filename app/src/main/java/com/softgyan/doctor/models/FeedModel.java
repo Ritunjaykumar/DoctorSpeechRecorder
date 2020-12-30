@@ -8,22 +8,19 @@ public class FeedModel {
     private final String userId;
     private final String uploadDate;
     private final String newFeed;
+    private final String documentId;
 
-    public FeedModel(String userName, String userId, String uploadDate, String newFeed) {
+    public FeedModel(String userName, String userId, String uploadDate, String newFeed, String documentId) {
         this.userName = userName;
         this.userId = userId;
         this.uploadDate = uploadDate;
         this.newFeed = newFeed;
+        this.documentId = documentId;
     }
 
-    protected FeedModel(Parcel in) {
-        userName = in.readString();
-        userId = in.readString();
-        uploadDate = in.readString();
-        newFeed = in.readString();
+    public String getDocumentId() {
+        return documentId;
     }
-
-
 
     public String getUserName() {
         return userName;

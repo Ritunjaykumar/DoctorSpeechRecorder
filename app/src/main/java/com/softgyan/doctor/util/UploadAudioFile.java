@@ -22,16 +22,16 @@ public class UploadAudioFile {
         mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
-    public void uploadAudioFile(Uri audioUri) {
-        String path = UserInfo.getInstance(mContext).getUserId() + System.currentTimeMillis() + ".mp3";
-        StorageReference riversRef = mStorageRef.child("audio/" + path);
+    public void uploadAudioFile(Uri audioUri, String fileName) {
+//        String fileName = UserInfo.getInstance(mContext).getUserId() + System.currentTimeMillis() + ".mp3";
+        StorageReference riversRef = mStorageRef.child("audio/" + fileName);
         riversRef.putFile(audioUri)
                 .addOnSuccessListener(taskSnapshot -> {
                     Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!uriTask.isSuccessful()) ;
                     Uri downloadUri = uriTask.getResult();
                     String downloadUrl = String.valueOf(downloadUri);
-                    audioListener.onUploadSuccess(downloadUrl, path);
+                    audioListener.onUploadSuccess(downloadUrl, fileName);
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override

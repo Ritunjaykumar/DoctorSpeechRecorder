@@ -61,7 +61,8 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 if (NetworkManagerCustom.isOnline(mContext)) {
-                    uploadFile(audioFiles[position]);
+                    Toast.makeText(mContext, audioFiles[position].getName(), Toast.LENGTH_SHORT).show();
+                    uploadFile(audioFiles[position], audioFiles[position].getName());
                 }else {
                     Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
                 }
@@ -85,7 +86,7 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.ViewHolder> 
         });
     }
 
-    private void uploadFile(File audioFile) {
+    private void uploadFile(File audioFile, String fileName) {
         Uri fileUri = Uri.fromFile(audioFile);
         progressDialog.setTitle("Uploading.. " + audioFile.getName());
         progressDialog.setProgress(0);
@@ -124,7 +125,7 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.ViewHolder> 
                     progressDialog.setProgress(currentProgress);
                 }
             });
-            uploadAudioFile.uploadAudioFile(fileUri);
+            uploadAudioFile.uploadAudioFile(fileUri,fileName);
         }
 
     }

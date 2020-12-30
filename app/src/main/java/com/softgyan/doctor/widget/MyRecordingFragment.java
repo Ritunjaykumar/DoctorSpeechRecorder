@@ -191,6 +191,7 @@ public class MyRecordingFragment extends Fragment {
         ivControl.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()), R.drawable.ic_play_now));
         title.setText(R.string.not_playing);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
         mediaPlayer.stop();
         tvFileName.setText("no audio selected");
         handler.removeCallbacks(updateSeekBar);

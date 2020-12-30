@@ -73,12 +73,13 @@ public class NewFeedActivity extends AppCompatActivity {
     }
 
 
-    private void uploadPost(String feed) {
+    private void uploadPost(String feed, String document_id) {
         Bundle bundle = new Bundle();
         bundle.putString("feed", feed);
         bundle.putString("date", Timestamp.now().toDate().toString());
         bundle.putString("user_name", UserInfo.getInstance(this).getUserName());
         bundle.putString("user_id", UserInfo.getInstance(this).getUserId());
+        bundle.putString("document_id", document_id);
 
         Intent intent = getIntent();
         intent.putExtras(bundle);
@@ -100,7 +101,8 @@ public class NewFeedActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        uploadPost(feed);
+                        String document_id = documentReference.getId();
+                        uploadPost(feed, document_id);
                         progressBar.setVisibility(View.GONE);
                     }
                 })

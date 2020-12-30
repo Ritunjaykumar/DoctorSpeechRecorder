@@ -58,6 +58,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
             bundle.putString("date", fm.getUploadDate());
             bundle.putString("user_name", fm.getUserName());
             bundle.putBoolean("file", false);
+            bundle.putString("document_id", fm.getDocumentId());
             feedIntent.putExtra("feed_details",bundle);
             holder.itemView.getContext().startActivity(feedIntent);
         } catch (Exception ex) {

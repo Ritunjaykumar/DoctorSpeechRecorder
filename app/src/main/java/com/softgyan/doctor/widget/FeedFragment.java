@@ -112,11 +112,13 @@ public class FeedFragment extends Fragment {
                 String user_id = bundle.getString("user_id");
                 String feed = bundle.getString("feed");
                 String date = bundle.getString("date");
+                String documentId = bundle.getString("document_id");
                 FeedModel feedModel = new FeedModel(
                         user_name,
                         user_id,
                         date,
-                        feed
+                        feed,
+                        documentId
                 );
                 feedModelList.add(0, feedModel);
                 feedAdapter.notifyItemInserted(0);
@@ -173,11 +175,13 @@ public class FeedFragment extends Fragment {
                             List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
                             previousDocument = documents.get(documents.size()-1);
                             for (DocumentSnapshot ds : documents) {
+                                String documentName = ds.getId();
                                 FeedModel feedModel = new FeedModel(
                                         ds.getString("user_name"),
                                         ds.getString("user_id"),
                                         ds.getTimestamp("date").toDate().toString(),
-                                        ds.getString("feed")
+                                        ds.getString("feed"),
+                                        documentName
                                 );
                                 feedModels.add(feedModel);
                             }
@@ -208,11 +212,13 @@ public class FeedFragment extends Fragment {
                             List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
                             previousDocument = documents.get(documents.size()-1);
                             for (DocumentSnapshot ds : documents) {
+                                String documentId = ds.getId();
                                 FeedModel feedModel = new FeedModel(
                                         ds.getString("user_name"),
                                         ds.getString("user_id"),
                                         ds.getTimestamp("date").toDate().toString(),
-                                        ds.getString("feed")
+                                        ds.getString("feed"),
+                                        documentId
                                 );
                                 feedModels.add(feedModel);
                             }
