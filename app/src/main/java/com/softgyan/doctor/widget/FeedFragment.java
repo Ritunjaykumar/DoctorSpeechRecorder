@@ -16,12 +16,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.softgyan.doctor.R;
 import com.softgyan.doctor.adapter.FeedAdapter;
 import com.softgyan.doctor.models.FeedModel;
@@ -37,12 +35,14 @@ public class FeedFragment extends Fragment {
     private FeedAdapter feedAdapter;
     private ProgressBar progressBar;
     private FloatingActionButton fabAdd;
+    private FloatingActionButton fabRecording;
 
     private boolean isScrolling = false;
     private int postData;
     private int currentData;
     private int totalData;
     private static DocumentSnapshot previousDocument;
+
     private FeedFragment() {
     }
 
@@ -59,6 +59,7 @@ public class FeedFragment extends Fragment {
         rvFeedContainer = view.findViewById(R.id.rv_feed_container);
         progressBar = view.findViewById(R.id.progressBar);
         fabAdd = view.findViewById(R.id.floatingActionButton);
+        fabRecording = view.findViewById(R.id.fab_recording);
         return view;
     }
 
@@ -76,6 +77,12 @@ public class FeedFragment extends Fragment {
         fabAdd.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), NewFeedActivity.class);
             startActivityForResult(intent, FEED_REQUEST_CODE);
+        });
+        fabRecording.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), RecordingActivity.class));
+            }
         });
 
         rvFeedContainer.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -130,7 +137,7 @@ public class FeedFragment extends Fragment {
 
 
     private void getData(boolean flag) {
-        GetData getData =new GetData(new GetDataListener() {
+        GetData getData = new GetData(new GetDataListener() {
             @Override
             public void onGetData(List<FeedModel> feedModels) {
                 if (feedModels != null) {
@@ -140,17 +147,16 @@ public class FeedFragment extends Fragment {
 
             @Override
             public void onFailedListener(Exception ex) {
-                Toast.makeText(getContext(), "onFailedListener"+ex.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "onFailedListener" + ex.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-        if(flag){
+        if (flag) {
             getData.getFirstData();
-        }else {
+        } else {
             getData.getNextFeedData();
         }
         feedAdapter.notifyDataSetChanged();
     }
-
 
 
     private class GetData {
@@ -173,7 +179,7 @@ public class FeedFragment extends Fragment {
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         try {
                             List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
-                            previousDocument = documents.get(documents.size()-1);
+                            previousDocument = documents.get(documents.size() - 1);
                             for (DocumentSnapshot ds : documents) {
                                 String documentName = ds.getId();
                                 FeedModel feedModel = new FeedModel(
@@ -196,8 +202,9 @@ public class FeedFragment extends Fragment {
                         getDataListener.onFailedListener(e);
                     });
         }
+
         public void getNextFeedData() {
-            if(previousDocument == null){
+            if (previousDocument == null) {
                 Toast.makeText(getContext(), "something is error! try again", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -210,7 +217,7 @@ public class FeedFragment extends Fragment {
                     .addOnSuccessListener(queryDocumentSnapshots -> {
                         try {
                             List<DocumentSnapshot> documents = queryDocumentSnapshots.getDocuments();
-                            previousDocument = documents.get(documents.size()-1);
+                            previousDocument = documents.get(documents.size() - 1);
                             for (DocumentSnapshot ds : documents) {
                                 String documentId = ds.getId();
                                 FeedModel feedModel = new FeedModel(

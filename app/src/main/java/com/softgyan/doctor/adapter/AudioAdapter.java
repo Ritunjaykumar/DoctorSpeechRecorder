@@ -32,10 +32,8 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.ViewHolder> 
     private final File[] audioFiles;
     private final OnItemClickListener itemClickListener;
     private View previousView = null;
-    private View currentView = null;
-    private UploadAudioFile uploadAudioFile;
     private final Context mContext;
-    private ProgressDialog progressDialog;
+    private final ProgressDialog progressDialog;
 
     public AudioAdapter(Context context, File[] audioFiles, OnItemClickListener itemClickListener) {
         this.mContext = context;
@@ -72,16 +70,14 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.ViewHolder> 
             if (previousView == null) {
                 previousView = holder.itemView;
                 holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.secondary_text));
-                itemClickListener.onClick(audioFiles[position], position, holder.itemView, previousView);
-                currentView = holder.itemView;
+                itemClickListener.onClick(audioFiles[position]);
             } else if (previousView.equals(holder.itemView)) {
                 previousView = holder.itemView;
             } else {
                 previousView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.accent));
                 holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.secondary_text));
-                itemClickListener.onClick(audioFiles[position], position, holder.itemView, previousView);
+                itemClickListener.onClick(audioFiles[position]);
                 previousView = holder.itemView;
-                currentView = holder.itemView;
             }
         });
     }
@@ -92,7 +88,7 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.ViewHolder> 
         progressDialog.setProgress(0);
         if (fileUri != null) {
             progressDialog.show();
-            uploadAudioFile = new UploadAudioFile(mContext, new UploadAudioFile.OnUploadAudioListener() {
+            UploadAudioFile uploadAudioFile = new UploadAudioFile(mContext, new UploadAudioFile.OnUploadAudioListener() {
                 @Override
                 public void onUploadFailed(Exception ex) {
                     Toast.makeText(mContext, ex.getMessage(), Toast.LENGTH_SHORT).show();
@@ -155,6 +151,6 @@ public class AudioAdapter extends RecyclerView.Adapter<AudioAdapter.ViewHolder> 
     }
 
     public interface OnItemClickListener {
-        void onClick(File file, int position, View currentView, View previousView);
+        void onClick(File file);
     }
 }

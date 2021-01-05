@@ -35,8 +35,9 @@
         android:layout_below="@id/app_bar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
+        android:textAllCaps="false"
         android:gravity="center"
-        android:text="Add txt File"
+        android:text="Add text File"
         android:background="@drawable/bg_button"
         android:textColor="@color/white"
         android:textSize="@dimen/text_value_16" />

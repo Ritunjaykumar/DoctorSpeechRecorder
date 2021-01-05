@@ -42,8 +42,6 @@ public class MyRecordingFragment extends Fragment {
     private TextView title;
     private TextView tvFileName;
     private ImageView ivControl;
-    private ImageView ivForward;
-    private ImageView ivBackward;
     private LinearLayout header;
     private SeekBar seekBar;
     private Handler handler;
@@ -53,8 +51,6 @@ public class MyRecordingFragment extends Fragment {
     private File fileToPlay;
     private boolean isPlaying = true;
 
-    private View currentView=null, previousView=null;
-    private int position=-1;
 
     private MyRecordingFragment() {
     }
@@ -77,8 +73,6 @@ public class MyRecordingFragment extends Fragment {
         title = view.findViewById(R.id.player_header);
         tvFileName = view.findViewById(R.id.music_title);
         ivControl = view.findViewById(R.id.iv_control);
-        ivBackward = view.findViewById(R.id.iv_backword);
-        ivForward = view.findViewById(R.id.iv_forword);
         seekBar = view.findViewById(R.id.seek_bar);
 
         return view;
@@ -105,22 +99,7 @@ public class MyRecordingFragment extends Fragment {
                 Toast.makeText(getContext(), "song are not selected", Toast.LENGTH_SHORT).show();
             }
         });
-//        ivForward.setOnClickListener(v -> {
-//            int nextPos = position+1;
-//            if(position != -1 && nextPos < audioFiles.length){
-//                forwardBackward(position, nextPos);
-//            }else {
-//                Toast.makeText(getContext(), "no more file", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        ivBackward.setOnClickListener((v -> {
-//            int prePos = position-1;
-//            if(position != -1 && prePos > -1){
-//                forwardBackward(position, prePos);
-//            }else {
-//                Toast.makeText(getContext(), "no more file", Toast.LENGTH_SHORT).show();
-//            }
-//        }));
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -152,11 +131,7 @@ public class MyRecordingFragment extends Fragment {
         File directory = new File(path);
         audioFiles = directory.listFiles(pathname -> {
             String[] fileName = pathname.getName().split("&");
-            if(fileName[0].equals(UserInfo.getInstance(getContext()).getUserId())){
-                return true;
-            }else {
-                return false;
-            }
+            return fileName[0].equals(UserInfo.getInstance(getContext()).getUserId());
         });
         if (audioFiles.length != 0) {
             rvAudioContainer.setVisibility(View.VISIBLE);
@@ -166,10 +141,8 @@ public class MyRecordingFragment extends Fragment {
             noFile.setVisibility(View.VISIBLE);
         }
 
-        audioAdapter = new AudioAdapter(getContext(),audioFiles, (file, position, currentView, previousView) -> {
-            this.currentView = currentView;
-            this.previousView = previousView;
-            this.position = position;
+        audioAdapter = new AudioAdapter(getContext(),audioFiles, (file) -> {
+
             fileToPlay = file;
             if (!isPlaying) {
                 stopAudio();
@@ -270,22 +243,5 @@ public class MyRecordingFragment extends Fragment {
         Log.i(",my_tag","onStop");
     }
 
-//    private void forwardBackward(int position, int pre){
-//        File currentFile = audioFiles[pre];
-//        if(currentFile != null) {
-//            stopAudio();
-//            playAudio(currentFile);
-//        }
-//        if(previousView != null) {
-//            previousView.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.accent));
-//            currentView = audioAdapter.getCurrentView();
-//            if(currentView != null){
-//                currentView.setBackgroundColor(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.secondary_text));
-//            }
-//        }
-//        audioAdapter.notifyItemChanged(position);
-//        audioAdapter.notifyItemChanged(pre);
-//        position = pre;
-//
-//    }
+
 }

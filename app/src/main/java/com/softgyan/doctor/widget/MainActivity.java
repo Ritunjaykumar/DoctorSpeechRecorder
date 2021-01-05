@@ -29,8 +29,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ViewPager viewPager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        viewPager = findViewById(R.id.vp_fragment);
+        ViewPager viewPager = findViewById(R.id.vp_fragment);
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         setWithViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);

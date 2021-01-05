@@ -3,11 +3,9 @@ package com.softgyan.doctor.widget;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Chronometer;
 import android.widget.TextView;
@@ -22,6 +20,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.softgyan.doctor.R;
+import com.softgyan.doctor.util.RecordingManager;
 import com.softgyan.doctor.util.UserInfo;
 
 import java.io.BufferedReader;
@@ -42,8 +41,9 @@ public class FeedDetailsActivity extends AppCompatActivity {
     private TextView tvRecordOption;
 
     private TextView tvRecordFileName;
-    private boolean isRecording = true;
-    private MediaRecorder mediaRecorder;
+    private RecordingManager recordingManager;
+//    private boolean isRecording = true;
+//    private MediaRecorder mediaRecorder;
     private String document_id;
 
 
@@ -64,14 +64,16 @@ public class FeedDetailsActivity extends AppCompatActivity {
         tvRecordFileName = findViewById(R.id.textView2);
         recordTimer = findViewById(R.id.record_timer);
         tvRecordOption = findViewById(R.id.tv_record_option);
+
+        recordingManager = new RecordingManager(this);
+
         btnRecord.setOnClickListener(v -> {
             if (checkPermission()) {
-                if (isRecording) {
+                if (!recordingManager.isRecordingStart()) {
                     recordAudio();
                 } else {
                     stopRecording();
                 }
-                isRecording = !isRecording;
             } else {
                 ActivityCompat.requestPermissions(FeedDetailsActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 100);
             }
@@ -94,36 +96,17 @@ public class FeedDetailsActivity extends AppCompatActivity {
     }
 
     private boolean checkPermission() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void recordAudio() {
-        String recordPath = this.getExternalFilesDir("/").getAbsolutePath();
-        String fileName = UserInfo.getInstance(FeedDetailsActivity.this).getUserId() + "&" + document_id+"&"+UUID.randomUUID().toString().substring(0, 5) + ".mp3";
-        tvRecordFileName.setText(fileName);
-
         tvRecordOption.setText("Recording Started");
         tvRecordOption.setTextColor(ContextCompat.getColor(FeedDetailsActivity.this, R.color.green));
         btnRecord.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_stop));
-
+        String fileName = recordingManager.startRecording();
         recordTimer.setBase(SystemClock.elapsedRealtime());
         recordTimer.start();
-
-        mediaRecorder = new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        mediaRecorder.setOutputFile(recordPath + "/" + fileName);
-        try {
-            mediaRecorder.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mediaRecorder.start();
+        tvRecordFileName.setText(fileName);
     }
 
     private void stopRecording() {
@@ -131,29 +114,8 @@ public class FeedDetailsActivity extends AppCompatActivity {
         tvRecordOption.setTextColor(ContextCompat.getColor(FeedDetailsActivity.this, R.color.red));
         recordTimer.stop();
         btnRecord.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_recording));
-        mediaRecorder.stop();
-        mediaRecorder.release();
-        mediaRecorder = null;
+        recordingManager.stopRecording();
     }
-
-
-//    private void startSetData() {
-//        try {
-//
-//            if (feedModel != null) {
-//                String userName = feedModel.getUserName();
-//                String date = feedModel.getUploadDate();
-//                String feed = feedModel.getNewFeed();
-//                setData(userName, date, feed);
-//            } else {
-//                Toast.makeText(this, "feed not found", Toast.LENGTH_SHORT).show();
-//                finish();
-//            }
-//        } catch (Exception ex) {
-//            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
 
     private void setData(String userName, String date, String feed) {
         tvUserName.setText(userName);
@@ -169,15 +131,11 @@ public class FeedDetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (!isRecording) {
+        if (recordingManager.isRecordingStart()) {
             Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show();
             stopRecording();
         }
@@ -188,11 +146,7 @@ public class FeedDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("text/plain");
         startActivityForResult(intent, REQUEST_CODE);
-//        Intent intent = new Intent();
-//        intent.addCategory(Intent.CATEGORY_OPENABLE);
-//        intent.setType("text/plain");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent, getText(R.string.select_file)), REQUEST_CODE);
+
     }
 
     @Override
