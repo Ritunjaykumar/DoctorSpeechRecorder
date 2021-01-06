@@ -1,15 +1,11 @@
 package com.softgyan.doctor.widget;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,10 +20,8 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
 import com.softgyan.doctor.R;
 import com.softgyan.doctor.util.NetworkManagerCustom;
 import com.softgyan.doctor.util.UserInfo;
@@ -35,24 +29,27 @@ import com.softgyan.doctor.util.UserInfo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class NewFeedActivity extends AppCompatActivity {
 
-    private Button btnPost;
     private TextView etFeed;
     private ProgressBar progressBar;
-    final Timestamp now = Timestamp.now();
+    private String now;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_feed);
         setSupportActionBar(findViewById(R.id.tool_bar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        btnPost = findViewById(R.id.btn_post);
+        Button btnPost = findViewById(R.id.btn_post);
         etFeed = findViewById(R.id.et_new_feed);
         progressBar = findViewById(R.id.progressBar);
         btnPost.setOnClickListener(v -> {
@@ -67,7 +64,7 @@ public class NewFeedActivity extends AppCompatActivity {
                 Toast.makeText(NewFeedActivity.this, "Internet connection is not available", Toast.LENGTH_SHORT).show();
             }
         });
-        findViewById(R.id.tv_read_txt_file).setOnClickListener(view->{
+        findViewById(R.id.tv_read_txt_file).setOnClickListener(view -> {
             checkPermissions();
         });
     }
@@ -76,7 +73,7 @@ public class NewFeedActivity extends AppCompatActivity {
     private void uploadPost(String feed, String document_id) {
         Bundle bundle = new Bundle();
         bundle.putString("feed", feed);
-        bundle.putString("date", Timestamp.now().toDate().toString());
+        bundle.putString("date", now);
         bundle.putString("user_name", UserInfo.getInstance(this).getUserName());
         bundle.putString("user_id", UserInfo.getInstance(this).getUserId());
         bundle.putString("document_id", document_id);
@@ -88,7 +85,22 @@ public class NewFeedActivity extends AppCompatActivity {
 
     }
 
+
+    private String getCurrentDate() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            return dtf.format(now);
+        } else {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault(Locale.Category.FORMAT));
+            Date date = new Date();
+            return formatter.format(date);
+        }
+
+    }
+
     private void connectDb(String feed) {
+        now = getCurrentDate();
         progressBar.setVisibility(View.VISIBLE);
         Map<String, Object> feedMap = new HashMap<>();
         feedMap.put("user_id", UserInfo.getInstance(this).getUserId());
@@ -116,10 +128,9 @@ public class NewFeedActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
@@ -127,20 +138,20 @@ public class NewFeedActivity extends AppCompatActivity {
 
 
     private void checkPermissions() {
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED) {
             readFromFile();
-        }else {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == 1 && grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             readFromFile();
-        }else {
+        } else {
             Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
         }
     }
@@ -150,9 +161,6 @@ public class NewFeedActivity extends AppCompatActivity {
         intent.setType("text/plain");
         startActivityForResult(intent, 2);
 
-//        Intent intent = new Intent();
-//        intent.setType("text/plain");
-//        startActivityForResult(intent, 2);
     }
 
     @Override
@@ -162,7 +170,7 @@ public class NewFeedActivity extends AppCompatActivity {
             if (data != null && data.getData() != null) {
                 Uri uri = data.getData();
                 String fileContent = readText(uri);
-               etFeed.setText(fileContent);
+                etFeed.setText(fileContent);
             }
         }
     }

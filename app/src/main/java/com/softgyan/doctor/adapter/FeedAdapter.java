@@ -2,7 +2,6 @@ package com.softgyan.doctor.adapter;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.softgyan.doctor.R;
 import com.softgyan.doctor.models.FeedModel;
+import com.softgyan.doctor.util.TimeFormat;
 import com.softgyan.doctor.widget.FeedDetailsActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
@@ -59,7 +63,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
             bundle.putString("user_name", fm.getUserName());
             bundle.putBoolean("file", false);
             bundle.putString("document_id", fm.getDocumentId());
-            feedIntent.putExtra("feed_details",bundle);
+            feedIntent.putExtra("feed_details", bundle);
             holder.itemView.getContext().startActivity(feedIntent);
         } catch (Exception ex) {
             Toast.makeText(holder.itemView.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();

@@ -185,7 +185,7 @@ public class FeedFragment extends Fragment {
                                 FeedModel feedModel = new FeedModel(
                                         ds.getString("user_name"),
                                         ds.getString("user_id"),
-                                        ds.getTimestamp("date").toDate().toString(),
+                                        ds.getString("date"),
                                         ds.getString("feed"),
                                         documentName
                                 );
