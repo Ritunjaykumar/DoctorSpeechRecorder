@@ -131,6 +131,7 @@ public class AccountActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 String uid = Objects.requireNonNull(task.getResult()).getString("user_id");
                                 if (userId.equals(uid)) {
+                                    UserInfo.getInstance(AccountActivity.this).setFileValue(0);
                                     String uName = task.getResult().getString("user_name");
                                     UserInfo.getInstance(AccountActivity.this).setUserInfo(uid, uName);
                                     Toast.makeText(AccountActivity.this, "You are logged in", Toast.LENGTH_SHORT).show();

@@ -43,7 +43,7 @@ public class FeedDetailsActivity extends AppCompatActivity {
     private TextView tvRecordFileName;
     private RecordingManager recordingManager;
     private String document_id;
-
+    private int fileNo=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +84,12 @@ public class FeedDetailsActivity extends AppCompatActivity {
             String feed = bundle.getString("feed");
             document_id = bundle.getString("document_id");
             boolean isFile = bundle.getBoolean("file", false);
+            fileNo = UserInfo.getInstance(FeedDetailsActivity.this).getFileValue();
             if (isFile) {
                 readTextFile();
-                document_id = UUID.randomUUID().toString().substring(0, 10)+"&from_file";
+                document_id = UUID.randomUUID().toString().substring(0, 10)+"&from_file_"+fileNo;
             } else {
-                document_id = document_id.concat("&from_feed");
+                document_id = document_id.concat("&from_feed_"+fileNo);
                 setData(userName, date, feed);
             }
         }
@@ -109,6 +110,7 @@ public class FeedDetailsActivity extends AppCompatActivity {
     }
 
     private void stopRecording() {
+        UserInfo.getInstance(FeedDetailsActivity.this).setFileValue(fileNo);
         tvRecordOption.setText("Recording not Started");
         tvRecordOption.setTextColor(ContextCompat.getColor(FeedDetailsActivity.this, R.color.red));
         recordTimer.stop();

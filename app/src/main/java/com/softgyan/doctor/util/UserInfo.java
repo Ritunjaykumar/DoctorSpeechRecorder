@@ -50,4 +50,15 @@ public class UserInfo {
         editor.apply();
     }
 
+    public void setFileValue(int i){
+        i = i+1;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("file_name", i);
+        editor.apply();
+    }
+
+    public int getFileValue(){
+        return sharedPreferences.getInt("file_name", -1);
+    }
 }
+
