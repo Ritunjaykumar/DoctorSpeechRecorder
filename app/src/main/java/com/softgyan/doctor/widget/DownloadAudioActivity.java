@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,7 @@ public class DownloadAudioActivity extends AppCompatActivity {
     private RecyclerView rvAudioContainer;
     private static final List<AudioModel> audioModelList = new ArrayList<>();
     private ProgressBar progressBar;
+    private TextView tvMessage;
     private DocumentSnapshot previousDocument;
     private DownloadAudioAdapter audioAdapter;
     private boolean isScrolling = false;
@@ -57,6 +59,7 @@ public class DownloadAudioActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         rvAudioContainer = findViewById(R.id.rv_audio_container);
         progressBar = findViewById(R.id.progress_bar);
+        tvMessage = findViewById(R.id.tv_no_files);
         setRecyclerView();
     }
 
@@ -67,9 +70,9 @@ public class DownloadAudioActivity extends AppCompatActivity {
         audioAdapter = new DownloadAudioAdapter(audioModelList, this, new DownloadAudioAdapter.OnDownloadListener() {
             @Override
             public void onDownload(String downloadUrl, String fileName) {
-                if(getPermission()){
+                if (getPermission()) {
                     downloadAudioFile(downloadUrl, fileName);
-                }else {
+                } else {
                     Toast.makeText(DownloadAudioActivity.this, "Don't have permission to write file!", Toast.LENGTH_SHORT).show();
                 }
 
@@ -102,7 +105,7 @@ public class DownloadAudioActivity extends AppCompatActivity {
 
     }
 
-    private void downloadAudioFile( String downloadUrl,  String fileName) {
+    private void downloadAudioFile(String downloadUrl, String fileName) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl(downloadUrl);
 
@@ -115,7 +118,7 @@ public class DownloadAudioActivity extends AppCompatActivity {
         pd.show();
 
         try {
-            File localFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "dsr_"+fileName);
+            File localFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "dsr_" + fileName);
 
             Log.d("my_tag", "" + localFile.getAbsolutePath());
             storageRef.getFile(localFile)
@@ -123,7 +126,7 @@ public class DownloadAudioActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
 //                            if (localFile.canRead()) {
-                                pd.dismiss();
+                            pd.dismiss();
 //                            }
                             Toast.makeText(DownloadAudioActivity.this, "Download Completed", Toast.LENGTH_SHORT).show();
                             Toast.makeText(DownloadAudioActivity.this, "File saved in download directory", Toast.LENGTH_LONG).show();
@@ -157,7 +160,11 @@ public class DownloadAudioActivity extends AppCompatActivity {
             @Override
             public void onGetAudioData(List<AudioModel> audioModels) {
                 audioModelList.addAll(audioModels);
-                audioAdapter.notifyDataSetChanged();
+                if (audioModelList.size() != 0) {
+                    tvMessage.setVisibility(View.GONE);
+                    rvAudioContainer.setVisibility(View.VISIBLE);
+                    audioAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -183,16 +190,15 @@ public class DownloadAudioActivity extends AppCompatActivity {
     }
 
 
-    private boolean getPermission(){
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED){
+    private boolean getPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED) {
             return true;
-        }else {
+        } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
             return false;
         }
     }
-
 
 
     //for getting data from server
@@ -230,7 +236,9 @@ public class DownloadAudioActivity extends AppCompatActivity {
                             }
                             getAudioDataListener.onGetAudioData(audioModels);
                         } catch (Exception ex) {
-                            Toast.makeText(DownloadAudioActivity.this, "No more data!", Toast.LENGTH_SHORT).show();
+                            tvMessage.setVisibility(View.VISIBLE);
+                            rvAudioContainer.setVisibility(View.GONE);
+//                            Toast.makeText(DownloadAudioActivity.this, "No more data!", Toast.LENGTH_SHORT).show();
                         }
                         progressBar.setVisibility(View.GONE);
                     })

@@ -24,12 +24,14 @@
             app:titleTextColor="@color/white" />
     </com.google.android.material.appbar.AppBarLayout>
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_audio_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/app_bar"
         android:orientation="vertical"
+        android:visibility="visible"
         android:layout_above="@id/progress_bar"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
@@ -42,5 +44,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/value_8"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_no_files"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textColor="@color/primary"
+        android:visibility="gone"
+        android:textSize="@dimen/text_value_18"
+        android:textStyle="bold"
+        android:text="No files" />
 
 </RelativeLayout>

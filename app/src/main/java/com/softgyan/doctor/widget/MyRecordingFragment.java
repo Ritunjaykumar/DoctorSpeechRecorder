@@ -67,7 +67,7 @@ public class MyRecordingFragment extends Fragment {
         ConstraintLayout constraintLayout = view.findViewById(R.id.constraint_layout);
         bottomSheetBehavior = BottomSheetBehavior.from(constraintLayout);
         rvAudioContainer = view.findViewById(R.id.rv_audio_container);
-        noFile = view.findViewById(R.id.not_file);
+        noFile = view.findViewById(R.id.tv_no_files);
 
         header = view.findViewById(R.id.ll_header);
         title = view.findViewById(R.id.player_header);

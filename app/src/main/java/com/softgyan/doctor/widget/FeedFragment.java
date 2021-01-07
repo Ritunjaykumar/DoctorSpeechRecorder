@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,7 +37,7 @@ public class FeedFragment extends Fragment {
     private ProgressBar progressBar;
     private FloatingActionButton fabAdd;
     private FloatingActionButton fabRecording;
-
+    private TextView tvNoFiles;
     private boolean isScrolling = false;
     private int postData;
     private int currentData;
@@ -60,6 +61,7 @@ public class FeedFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBar);
         fabAdd = view.findViewById(R.id.floatingActionButton);
         fabRecording = view.findViewById(R.id.fab_recording);
+        tvNoFiles = view.findViewById(R.id.tv_no_files);
         return view;
     }
 
@@ -142,6 +144,13 @@ public class FeedFragment extends Fragment {
             public void onGetData(List<FeedModel> feedModels) {
                 if (feedModels != null) {
                     feedModelList.addAll(feedModels);
+                    if(feedModelList.size() == 0){
+                        rvFeedContainer.setVisibility(View.GONE);
+                        tvNoFiles.setVisibility(View.VISIBLE);
+                    }else{
+                        rvFeedContainer.setVisibility(View.VISIBLE);
+                        tvNoFiles.setVisibility(View.GONE);
+                    }
                 }
             }
 

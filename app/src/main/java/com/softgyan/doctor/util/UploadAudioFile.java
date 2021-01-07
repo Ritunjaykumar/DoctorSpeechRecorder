@@ -12,12 +12,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 public class UploadAudioFile {
-    private final Context mContext;
     private final StorageReference mStorageRef;
     private final OnUploadAudioListener audioListener;
 
     public UploadAudioFile(Context context, OnUploadAudioListener audioListener) {
-        this.mContext = context;
         this.audioListener = audioListener;
         mStorageRef = FirebaseStorage.getInstance().getReference();
     }

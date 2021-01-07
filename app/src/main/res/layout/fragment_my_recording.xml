@@ -8,14 +8,16 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/not_file"
+        android:id="@+id/tv_no_files"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="@dimen/text_value_18"
         android:textColor="@color/primary"
+        android:visibility="gone"
         android:textStyle="bold"
-        android:text="No files" />
+        android:text="No recordings files" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_audio_container"
         android:layout_width="match_parent"

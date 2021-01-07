@@ -88,7 +88,7 @@ public class FeedDetailsActivity extends AppCompatActivity {
                 readTextFile();
                 document_id = UUID.randomUUID().toString().substring(0, 10)+"&from_file";
             } else {
-                document_id = document_id.concat("from_feed");
+                document_id = document_id.concat("&from_feed");
                 setData(userName, date, feed);
             }
         }
